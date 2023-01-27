@@ -1,23 +1,18 @@
 import { Card, CardContent, Typography } from '@mui/material'
 import React from 'react'
 
-export const SackCard = () => {
+export const SackCard = ({ total }) => {
     return (
-        <Card sx={{ width: '90%', margin: '0 auto' }}>
+        <Card sx={{ width: '90%', margin: '10px auto' }}>
             <CardContent>
-                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                    Word of the Day
+                <Typography sx={{ mb: 1.5 }} color="text.secondary" gutterBottom>
+                    Category: {total.category_name}
                 </Typography>
                 <Typography variant="h5" component="div">
-                    benevolent
+                    {total.value / 100}€
                 </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    adjective
-                </Typography>
-                <Typography variant="body2">
-                    well meaning and kindly.
-                    <br />
-                    {'"a benevolent smile"'}
+                <Typography sx={{ fontSize: 14 }} color="text.secondary">
+                    Account: {total.category_account}
                 </Typography>
             </CardContent>
         </Card>

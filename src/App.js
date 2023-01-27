@@ -19,34 +19,36 @@ i18next.addResourceBundle('en', 'app', en);
 i18next.addResourceBundle('ca', 'app', ca);
 i18next.addResourceBundle('es', 'app', es);
 
-(() => {
-  axios.get(`${domain}categories`).then(console.log);
-})();
-
-//getAllRegs('categories').then(console.log);
+const getAllRegs = async (path) => {
+  const res = await axios.get(`${domain}${path}`);
+  return res;
+}
 
 function App() {
   const { t } = useTranslation('app');
   const [tabValue, setTabValue] = useState(0);
   const [categories, setCategories] = useState([]);
-  const [moviments, setMoviments] = useState([]);
-  const [percentatges, setPercentatges] = useState([]);
-
-  const getAll = async () => {
-    //const categories = await getAllRegs('categories');
-    //const moviments = await getAllRegs('moviments');
-    //const percentatges = await getAllRegs('percentatges');
-
-    //setCategories(categories);
-    //setMoviments(moviments);
-    //setPercentatges(percentatges);
-  }
+  const [movements, setMovements] = useState([]);
+  const [percentages, setPercentages] = useState([]);
+  const [totals, setTotals] = useState([]);
 
   useEffect(() => {
     //getAllRegs('categories').then(setCategories);
-    //getAllRegs('moviments').then(setMoviments);
-    //getAllRegs('percentatges').then(setPercentatges);
-    getAll();
+    getAllRegs('movements').then(res => {
+      setMovements(res.data);
+      const totals = res.data.reduce((acc, curr) => {
+        if (!acc[curr.category_id]) {
+          acc[curr.category_id] = curr;
+        } else {
+          acc[curr.category_id].value += curr.value;
+        }
+
+        return acc;
+      }, []);
+      setTotals(totals);
+      console.log({ totals });
+    });
+    //getAllRegs('percentages').then(setPercentages);
   }, [])
 
 
@@ -56,13 +58,12 @@ function App() {
 
   return (
     <div className="App">
-      {t('TITLE')}
-      <General t={t} categories={categories} moviments={moviments} percentatges={percentatges} />
-      <Tabs value={tabValue} onChange={handleChange} aria-label="icon label tabs example" sx={{ position: 'fixed', bottom: 0 }}>
+      <General t={t} categories={categories} movements={movements} percentages={percentages} totals={totals} />
+      {/*<Tabs value={tabValue} onChange={handleChange} aria-label="icon label tabs example" sx={{ position: 'fixed', bottom: 0 }}>
         <Tab icon={<PhoneIcon />} label="RECENTS" />
         <Tab icon={<FavoriteIcon />} label="FAVORITES" />
         <Tab icon={<PersonPinIcon />} label="NEARBY" />
-      </Tabs>
+  </Tabs>*/}
     </div>
   );
 }

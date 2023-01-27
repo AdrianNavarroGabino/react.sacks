@@ -1,9 +1,9 @@
 import React from 'react'
 import { SackContainer } from './table/SackContainer'
 
-export const General = ({ t, categories, moviments, percentatges }) => {
-    console.log({ categories, moviments, percentatges });
+export const General = ({ t, categories, movements, percentages, totals }) => {
+    console.log({ categories, movements, percentages });
     return (
-        <SackContainer t={t} />
+        <SackContainer t={t} totals={totals} />
     )
 }
